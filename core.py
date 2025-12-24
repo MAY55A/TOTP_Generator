@@ -54,7 +54,7 @@ def HOTP(k, c, digits=6, algorithm="sha1"):
     otp = s_num % (10 ** digits)
     return str(otp).zfill(digits)
 
-def TOTP(k, digits=6, timestep=30, t0=0, algorithm="sha1", unix_time=int(time.time())):
+def TOTP(k, digits=6, timestep=30, t0=0, algorithm="sha1", unix_time=None):
     """TOTP with specific Unix timestamp :
     k is the shared key,
     digits control the response length,
@@ -64,5 +64,7 @@ def TOTP(k, digits=6, timestep=30, t0=0, algorithm="sha1", unix_time=int(time.ti
     unix_time is the specific Unix timestamp to use (default None, which uses current time)
     """
 
+    if unix_time is None:
+        unix_time = int(time.time())
     time_steps = (unix_time - t0) // timestep
     return HOTP(k, time_steps, digits, algorithm)
