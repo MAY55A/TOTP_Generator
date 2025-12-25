@@ -1,32 +1,6 @@
 import hmac
 import time
 
-def prepare_secret(password, algorithm):
-    """Convert a password to a suitable secret for TOTP:
-    1. Encode the password to bytes
-    2. Repeat the password bytes until it reaches the required length for the hash algorithm
-    """
-    password_bytes = password.encode('utf-8')
-    
-    if algorithm.lower() == "sha1":
-        # SHA-1 needs at least 20 bytes
-        target_len = 20
-    elif algorithm.lower() == "sha256":
-        # SHA-256 needs at least 32 bytes
-        target_len = 32
-    elif algorithm.lower() == "sha512":
-        # SHA-512 needs at least 64 bytes
-        target_len = 64
-    else:
-        target_len = 20  # Default to SHA-1 length
-    
-    if len(password_bytes) < target_len:
-        repeats = (target_len + len(password_bytes) - 1) // len(password_bytes)
-        secret = (password_bytes * repeats)[:target_len]
-        return secret
-    else:
-        return password_bytes
-
 def DT(hs): # Dynamic Truncation
     offset = hs[-1] & 0b1111 # or & 15 or & 0xf to get last 4 bits
     p = hs[offset:offset+4]
@@ -37,15 +11,13 @@ def DT(hs): # Dynamic Truncation
         s_bits.append(b & 0xff) # return 8 bits exactly (apparently a byte can have more than 8 bits)
     return s_bits
 
-def HOTP(k, c, digits=6, algorithm="sha1"):
+def HOTP(k: bytes, c, digits=6, algorithm="sha1"):
     """HTOP :
     k is the shared key,
     C is the counter value,
     digits control the response length,
     algorithm is the hash function to use (e.g., 'sha1', 'sha256', 'sha512')
     """
-
-    k = prepare_secret(k, algorithm)
     counter_bytes = c.to_bytes(8, 'big') # 8-byte big-endian
     hs_hmac = hmac.new(k, counter_bytes, algorithm)
     hs = hs_hmac.digest()
@@ -54,7 +26,7 @@ def HOTP(k, c, digits=6, algorithm="sha1"):
     otp = s_num % (10 ** digits)
     return str(otp).zfill(digits)
 
-def TOTP(k, digits=6, timestep=30, t0=0, algorithm="sha1", unix_time=None):
+def TOTP(k: bytes, digits=6, timestep=30, t0=0, algorithm="sha1", unix_time=None):
     """TOTP with specific Unix timestamp :
     k is the shared key,
     digits control the response length,
