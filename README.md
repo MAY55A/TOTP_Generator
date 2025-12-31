@@ -81,3 +81,8 @@ secret_key = b'your-secret-key'
 token = hotp(secret_key, counter=0)
 print(token)  # e.g., "123456"
 ```
+
+## References
+
+- [RFC 6238 - TOTP: Time-Based One-Time Password Algorithm](https://tools.ietf.org/html/rfc6238)
+- [RFC 4226 - HOTP: An HMAC-Based One-Time Password Algorithm](https://tools.ietf.org/html/rfc4226)
