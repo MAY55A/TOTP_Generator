@@ -56,7 +56,7 @@ python cli.py --secret "MySecretKey"
 python cli.py --secret "MySecretKey" --digits 8 --algo sha256
 
 # With specific timestamp (RFC 6238 test vector)
-python cli.py --secret "12345678901234567890" --timestamp 59
+python cli.py --secret "12345678901234567890" --digits 8 --timestamp 59
 ```
 
 ### Python API
