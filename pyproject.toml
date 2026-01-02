@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "totp_generator"
+version = "0.1.0"
+description = "RFC 6238 compliant TOTP generator with configurable algorithms and timestamps"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Mayssa Ghanmi" }]
+requires-python = ">=3.8"
+
+dependencies = []
+
+[project.scripts]
+totp = "totp.cli:main"

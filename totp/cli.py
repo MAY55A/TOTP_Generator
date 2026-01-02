@@ -1,5 +1,5 @@
 import argparse
-from core import totp
+from totp.core import totp
 
 def main():
     parser = argparse.ArgumentParser(description="RFC 6238 TOTP generator")
