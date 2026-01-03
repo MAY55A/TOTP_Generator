@@ -14,17 +14,24 @@ This project focuses on correctness, simplicity, and educational clarity.
 - Optional custom timestamp (useful for testing)
 - Minimal dependencies (standard library only)
 
-> Note: An internal HOTP implementation exists as part of the TOTP logic, but only TOTP generation is exposed for now.
-
 ---
 
 ## Installation
+
+### Via pip
+
+```bash
+pip install git+https://github.com/MAY55A/TOTP_Generator.git
+```
+
+### From source
 
 Clone the repository:
 
 ```bash
 git clone https://github.com/MAY55A/TOTP_Generator.git
 cd TOTP_Generator
+pip install -e .
 ```
 
 ## Usage
@@ -34,7 +41,7 @@ cd TOTP_Generator
 Generate a TOTP code using the CLI:
 
 ```bash
-python cli.py --secret "your-secret-key"
+totp --secret "your-secret-key"
 ```
 
 #### CLI Options
@@ -50,13 +57,13 @@ python cli.py --secret "your-secret-key"
 
 ```bash
 # Basic TOTP with default settings
-python cli.py --secret "MySecretKey"
+totp --secret "MySecretKey"
 
 # Custom digit length and algorithm
-python cli.py --secret "MySecretKey" --digits 8 --algo sha256
+totp --secret "MySecretKey" --digits 8 --algo sha256
 
 # With specific timestamp (RFC 6238 test vector)
-python cli.py --secret "12345678901234567890" --digits 8 --timestamp 59
+totp --secret "12345678901234567890" --digits 8 --timestamp 59
 ```
 
 ### Python API
@@ -64,7 +71,7 @@ python cli.py --secret "12345678901234567890" --digits 8 --timestamp 59
 #### Generate a TOTP
 
 ```python
-from core import totp
+from totp import totp
 
 secret_key = b'your-secret-key'
 token = totp(secret_key)
@@ -74,12 +81,11 @@ print(token)
 #### Generate an HOTP
 
 ```python
-from core import hotp
+from totp import hotp
 
-# Generate a 6-digit HOTP with counter
 secret_key = b'your-secret-key'
-token = hotp(secret_key, counter=0)
-print(token)  # e.g., "123456"
+token = hotp(secret_key, 0) # counter = 0
+print(token)
 ```
 
 ## References
